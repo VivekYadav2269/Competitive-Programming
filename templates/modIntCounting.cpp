@@ -4,7 +4,7 @@ using i64 = long long;
 const int mod = 1E9 + 7;
 const int N = 1E6 + 7;
 
-int add(int x, int y) {
+int Add(int x, int y) {
     x += y;
     if (x >= mod) {
         x -= mod;
@@ -12,7 +12,7 @@ int add(int x, int y) {
     return x;
 }
 
-int sub(int x, int y) {
+int Sub(int x, int y) {
     x -= y;
     if (x < 0) {
         x += mod;
@@ -20,29 +20,29 @@ int sub(int x, int y) {
     return x;
 }
 
-int mul(int x, int y) {
+int Mul(int x, int y) {
     return 1LL * x * y % mod;
 }
 
-int power(int x, int y) {
+int Power(int x, int y) {
     int ans = 1;
-    for (; y != 0; x = mul(x, x), y >>= 1) {
+    for (; y != 0; x = Mul(x, x), y >>= 1) {
         if (y & 1) {
-            ans = mul(ans, x);
+            ans = Mul(ans, x);
         }
     }
     return ans;
 }
 
-std::vector <int> fact(N), inv(N), invFact(N);
+std::vector <int> Fact(N), Inv(N), invFact(N);
 
 void comb() {
-    fact[0] = 1, inv[0] = 1, invFact[0] = 1;
-    fact[1] = 1, inv[1] = 1, invFact[1] = 1;
+    Fact[0] = 1, Inv[0] = 1, invFact[0] = 1;
+    Fact[1] = 1, Inv[1] = 1, invFact[1] = 1;
     for (int i = 2; i < N; i++) {
-        inv[i] = sub(0, mul(inv[mod % i], mod / i));
-        fact[i] = mul(fact[i - 1], i);
-        invFact[i] = mul(invFact[i - 1], inv[i]);
+        Inv[i] = Sub(0, Mul(Inv[mod % i], mod / i));
+        Fact[i] = Mul(Fact[i - 1], i);
+        invFact[i] = Mul(invFact[i - 1], Inv[i]);
     }
 }
 
@@ -50,7 +50,7 @@ int C(int n, int r) {
     if (n < 0 || r < 0 || n < r) {
         return 0;
     }
-    return mul(fact[n], mul(invFact[n - r], invFact[r]));
+    return Mul(Fact[n], Mul(invFact[n - r], invFact[r]));
 }
 
 void solve() {
@@ -68,17 +68,17 @@ void solve() {
         }
         std::vector <int> ndp = dp;
         for (int j = n / 2; j >= c[i]; j--) {
-            ndp[j] = add(ndp[j], dp[j - c[i]]);
+            ndp[j] = Add(ndp[j], dp[j - c[i]]);
         }
         std::swap(dp, ndp);
     }
     
     int inv = 1;
     for (int i = 0; i < 26; i++) {
-        inv = mul(inv, invFact[c[i]]);
+        inv = Mul(inv, invFact[c[i]]);
     }
     
-    int ans = mul(mul(fact[n / 2], fact[(n + 1) / 2]), mul(inv, dp[n / 2]));
+    int ans = Mul(Mul(Fact[n / 2], Fact[(n + 1) / 2]), Mul(inv, dp[n / 2]));
     std::cout << ans << '\n';
 }
  
